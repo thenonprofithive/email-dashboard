@@ -1,0 +1,32 @@
+# TypeScript Rules
+- Enable strict mode in tsconfig.json (strict: true).
+- Prefer type aliases (type) for simple shapes, interfaces for complex structures.
+- Use TypeScript utility types (Partial, Readonly, Pick, Omit).
+- Explicitly type all props, state, and hook returns.
+- Type external data structures (API responses, third-party libraries) before usage.
+- Use unknown instead of any for untyped values, enforce shape checks.
+
+# React Native Rules
+- Use React Native’s native style types (StyleProp, ViewStyle, TextStyle, ImageStyle).
+- Strongly type navigation parameters (e.g., RootStackParamList with React Navigation).
+- Avoid inline styles in render functions, use StyleSheet.create for static styles.
+- Modularize logic with custom hooks, clearly type hook arguments and returns.
+- Type refs explicitly using React.forwardRef (e.g., React.forwardRef<TextInput>).
+
+# Structural & Architecture Rules
+- Use a feature-based folder structure: /components, /features/<feature>/.
+- Avoid any, use unknown instead.
+- Use ESLint + Prettier for code consistency, add TypeScript and React Native rules.
+- Be cautious with React.FC, define props directly if children aren’t needed.
+- Create an env.d.ts file for environment variable types.
+
+# Performance Optimization Rules
+- Use React.memo for pure components to avoid unnecessary re-renders.
+- Optimize FlatList and SectionList (e.g., use keyExtractor, getItemLayout).
+- Use helper functions/memoized callbacks in render items, avoid anonymous functions.
+- Use React.lazy + Suspense for code splitting where possible.
+- Enable Hermes for improved performance on Android and iOS.
+
+# Testing Rules
+- Use @testing-library/react-native for integration tests, add types to utilities.
+- Use jest.MockedFunction for accurate typing of mocked functions.

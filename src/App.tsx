@@ -1,26 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import DashboardForm from './components/DashboardForm';
+import EmailEventsTable from './components/EmailEventsTable';
+import { DashboardFormData, EmailEvent } from './types/api';
+import { fetchEmailStats } from './services/api';
 import './App.css';
 
-function App() {
+const App: React.FC = () => {
+  const [emailEvents, setEmailEvents] = useState<EmailEvent[]>([]);
+  const [error, setError] = useState<string>('');
+
+  const handleSubmit = async (formData: DashboardFormData) => {
+    try {
+      setError('');
+      const response = await fetchEmailStats(formData);
+      setEmailEvents(response.events);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    }
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Email Dashboard</h1>
+      <DashboardForm onSubmit={handleSubmit} />
+      
+      {error && <div className="error">{error}</div>}
+      
+      {emailEvents.length > 0 && (
+        <div className="results">
+          <h2>Results</h2>
+          <p>Found {emailEvents.length} events</p>
+          <EmailEventsTable events={emailEvents} />
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default App;
