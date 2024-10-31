@@ -15,7 +15,8 @@
   margin-bottom: 5px;
 }
 
-.formGroup input {
+.formGroup input,
+.formGroup select {
   width: 100%;
   padding: 8px;
   border: 1px solid #ccc;
@@ -34,4 +35,10 @@ button {
 
 button:hover {
   background-color: #0056b3;
+}
+
+.error {
+  color: #dc3545;
+  margin-top: 5px;
+  font-size: 0.9em;
 }
