@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AlertCircle, Mail, Lock, User, Github, Facebook, Twitter } from 'lucide-react';
+import { AlertCircle, Github, Facebook, Twitter } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,7 +13,7 @@ const LoginForm = () => {
   const [website, setWebsite] = useState('');
   const [error, setError] = useState('');
 
-  const handleLogin = (e) => {
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!email || !password || !website) {
       setError('Please fill in all fields');
@@ -25,7 +25,7 @@ const LoginForm = () => {
     }
   };
 
-  const handleSocialLogin = (platform) => {
+  const handleSocialLogin = (platform: string) => {
     console.log(`${platform} login attempted`);
     // Here you would typically handle the social login logic
     alert(`${platform} login attempted`);
@@ -47,7 +47,6 @@ const LoginForm = () => {
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                icon={<Mail className="h-4 w-4 text-gray-500" />}
               />
             </div>
             <div className="space-y-2">
@@ -58,7 +57,6 @@ const LoginForm = () => {
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                icon={<Lock className="h-4 w-4 text-gray-500" />}
               />
             </div>
             <div className="space-y-2">
