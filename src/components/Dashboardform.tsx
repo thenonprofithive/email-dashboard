@@ -1,12 +1,6 @@
 import React, { FormEvent, ChangeEvent } from 'react';
 import './DashboardForm.css';
-
-interface FormData {
-  apiKey: string;
-  templateId: string;
-  startDate: string;
-  endDate: string;
-}
+import { FormData } from '../types/api'
 
 interface DashboardFormProps {
   onSubmit: (data: FormData) => void;

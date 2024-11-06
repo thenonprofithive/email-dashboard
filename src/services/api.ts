@@ -1,16 +1,14 @@
 import { EmailEvent } from '../types/api';
-
-interface FetchEmailEventsParams {
-  apiKey: string;
-  templateId: string;
-  startDate: string;
-  endDate: string;
-}
+import { FormData } from '../types/api';
 
 export const fetchEmailEvents = async (
-  params: FetchEmailEventsParams
+  params: FormData
 ): Promise<EmailEvent[]> => {
   const { apiKey, templateId, startDate, endDate } = params;
+
+  if (!apiKey) {
+    throw new Error('API key is required');
+  }
 
   const url = `https://api.brevo.com/v3/smtp/statistics/events?limit=2500&offset=0&startDate=${startDate}&endDate=${endDate}&templateId=${templateId}&sort=desc`;
   console.log(url);
@@ -18,10 +16,10 @@ export const fetchEmailEvents = async (
   try {
     const response = await fetch(url, {
       method: 'GET',
-      headers: {
-        accept: 'application/json',
+      headers: new Headers({
+        'accept': 'application/json',
         'api-key': apiKey,
-      },
+      }),
     });
 
     if (!response.ok) {
