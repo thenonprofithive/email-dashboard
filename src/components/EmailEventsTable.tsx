@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './EmailEventsTable.css';
 import { EmailEvent, EmailEventType } from '../types/api';
 import { StatusColorType, EmailSummary, EventSummary } from '../types/components';
@@ -23,11 +23,14 @@ const getEventStatusColor = (event: EmailEventType): StatusColorType => {
   return statusClasses[event] || 'info';
 };
 
+type FilterType = 'All' | 'Bounces' | 'Not Opened';
+
 interface EmailEventsTableProps {
   events: EmailEvent[];
 }
 
 const EmailEventsTable: React.FC<EmailEventsTableProps> = ({ events }) => {
+  const [filter, setFilter] = useState<FilterType>('All');
 
   const processEmails = (): EmailSummary[] => {
     const emailMap = new Map<string, EmailSummary>();
@@ -54,7 +57,25 @@ const EmailEventsTable: React.FC<EmailEventsTableProps> = ({ events }) => {
       }
     });
 
-    return Array.from(emailMap.values());
+    let processedEmails = Array.from(emailMap.values());
+
+    if (filter === 'Bounces') {
+      processedEmails = processedEmails.filter(email => 
+        email.events.some(event => 
+          event.event === 'hardBounces' || event.event === 'softBounces'
+        )
+      );
+    } else if (filter === 'Not Opened') {
+      processedEmails = processedEmails.filter(email => {
+        const hasInteraction = email.events.some(event => 
+          event.event === 'opened' || 
+          event.event === 'clicks'
+        );
+        return !hasInteraction;
+      });
+    }
+
+    return processedEmails;
   };
 
   const EventSummaryComponent: React.FC<{ event: EventSummary }> = ({ event }) => {
@@ -77,6 +98,18 @@ const EmailEventsTable: React.FC<EmailEventsTableProps> = ({ events }) => {
 
   return (
     <div className="tableContainer">
+      <div className="filterContainer">
+        <select 
+          value={filter}
+          onChange={(e) => setFilter(e.target.value as FilterType)}
+          className="filterSelect"
+        >
+          <option value="All">All</option>
+          <option value="Bounces">Bounces</option>
+          <option value="Not Opened">Not Opened</option>
+        </select>
+      </div>
+
       <table className="email-events-table">
         <thead>
           <tr>
