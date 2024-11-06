@@ -8,13 +8,30 @@ interface DashboardFormProps {
 
 // Changed to React.Component class
 class DashboardForm extends React.Component<DashboardFormProps, { formData: FormData }> {
+  getPreviousMonday = () => {
+    const today = new Date();
+    const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
+    
+    // Calculate days to subtract to get to previous Monday
+    let daysToSubtract = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+    
+    // If today is Monday, go back an additional week
+    if (daysToSubtract === 0) {
+      daysToSubtract = 7;
+    }
+    
+    const previousMonday = new Date(today);
+    previousMonday.setDate(today.getDate() - daysToSubtract);
+    return previousMonday.toISOString().split('T')[0];
+  };
+
   constructor(props: DashboardFormProps) {
     super(props);
     this.state = {
       formData: {
         apiKey: '',
-        templateId: '',
-        startDate: '',
+        templateId: '4',
+        startDate: this.getPreviousMonday(),
         endDate: new Date().toISOString().split('T')[0] // Today's date
       }
     };
@@ -71,8 +88,8 @@ class DashboardForm extends React.Component<DashboardFormProps, { formData: Form
     this.setState({
       formData: {
         apiKey: '',
-        templateId: '',
-        startDate: '',
+        templateId: '4',
+        startDate: this.getPreviousMonday(),
         endDate: new Date().toISOString().split('T')[0]
       }
     });
