@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './EmailEventsTable.css';
-import '../types/api'
+import { EmailEvent, EmailEventType } from '../types/api';
+import { StatusColorType, EmailSummary, EventSummary } from '../types/components';
 
-
-const getEventStatusColor = (event: EventType): StatusColorType => {
-  const statusClasses: Record<EventType, StatusColorType> = {
+const getEventStatusColor = (event: EmailEventType): StatusColorType => {
+  const statusClasses: Record<EmailEventType, StatusColorType> = {
     delivered: 'success',
     opened: 'success',
     clicks: 'success',
@@ -14,17 +14,20 @@ const getEventStatusColor = (event: EventType): StatusColorType => {
     error: 'error',
     spam: 'warning',
     blocked: 'warning',
-    invalid: 'warning'
+    invalid: 'warning',
+    requests: 'info',
+    deferred: 'warning',
+    unsubscribed: 'warning',
+    loadedByProxy: 'info'
   };
   return statusClasses[event] || 'info';
 };
 
 interface EmailEventsTableProps {
   events: EmailEvent[];
-  onTemplateChange?: (templateId: number | null) => void;
 }
 
-const EmailEventsTable: React.FC<EmailEventsTableProps> = ({ events, onTemplateChange }) => {
+const EmailEventsTable: React.FC<EmailEventsTableProps> = ({ events }) => {
 
   const processEmails = (): EmailSummary[] => {
     const emailMap = new Map<string, EmailSummary>();
@@ -39,7 +42,7 @@ const EmailEventsTable: React.FC<EmailEventsTableProps> = ({ events, onTemplateC
       }
 
       const emailSummary = emailMap.get(event.email)!;
-      const existingEvent = emailSummary.events.find(e => e.event === event.event);
+      const existingEvent = emailSummary.events.find((e: EventSummary) => e.event === event.event);
 
       if (existingEvent) {
         existingEvent.dates.push(new Date(event.date));
@@ -56,8 +59,8 @@ const EmailEventsTable: React.FC<EmailEventsTableProps> = ({ events, onTemplateC
 
   const EventSummaryComponent: React.FC<{ event: EventSummary }> = ({ event }) => {
     const dates = event.dates
-      .sort((a, b) => b.getTime() - a.getTime())
-      .map(date => date.toLocaleString())
+      .sort((a: Date, b: Date) => b.getTime() - a.getTime())
+      .map((date: Date) => date.toLocaleString())
       .join(', ');
 
     return (
@@ -68,12 +71,6 @@ const EmailEventsTable: React.FC<EmailEventsTableProps> = ({ events, onTemplateC
         </div>
       </div>
     );
-  };
-
-  const handleTemplateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value ? Number(e.target.value) : null;
-    setSelectedTemplateId(value);
-    onTemplateChange?.(value);
   };
 
   const processedEmails = processEmails();
@@ -94,7 +91,7 @@ const EmailEventsTable: React.FC<EmailEventsTableProps> = ({ events, onTemplateC
               <td>{emailSummary.email}</td>
               <td>{emailSummary.subject}</td>
               <td>
-                {emailSummary.events.map((event, index) => (
+                {emailSummary.events.map((event: EventSummary, index: number) => (
                   <React.Fragment key={event.event}>
                     <EventSummaryComponent event={event} />
                     {index < emailSummary.events.length - 1 && <hr />}
