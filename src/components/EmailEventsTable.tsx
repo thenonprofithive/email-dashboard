@@ -40,11 +40,17 @@ const EmailEventsTable: React.FC<EmailEventsTableProps> = ({ events }) => {
         emailMap.set(event.email, {
           email: event.email,
           subject: event.subject,
-          events: []
+          events: [],
+          sentDate: new Date(event.date)
         });
       }
 
       const emailSummary = emailMap.get(event.email)!;
+      
+      if (new Date(event.date) < emailSummary.sentDate) {
+        emailSummary.sentDate = new Date(event.date);
+      }
+
       const existingEvent = emailSummary.events.find((e: EventSummary) => e.event === event.event);
 
       if (existingEvent) {
@@ -115,6 +121,7 @@ const EmailEventsTable: React.FC<EmailEventsTableProps> = ({ events }) => {
           <tr>
             <th>Email</th>
             <th>Subject</th>
+            <th>Sent Date</th>
             <th>Events</th>
           </tr>
         </thead>
@@ -123,6 +130,7 @@ const EmailEventsTable: React.FC<EmailEventsTableProps> = ({ events }) => {
             <tr key={emailSummary.email}>
               <td>{emailSummary.email}</td>
               <td>{emailSummary.subject}</td>
+              <td>{emailSummary.sentDate.toLocaleString()}</td>
               <td>
                 {emailSummary.events.map((event: EventSummary, index: number) => (
                   <React.Fragment key={event.event}>
