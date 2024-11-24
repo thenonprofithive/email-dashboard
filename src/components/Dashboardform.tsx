@@ -1,13 +1,13 @@
 import React, { FormEvent, ChangeEvent } from 'react';
 import './DashboardForm.css';
-import { EmailEventData } from '../types/api'
+import { EmailEventApiData } from '../types/api'
 
 interface DashboardFormProps {
-  onSubmit: (data: EmailEventData) => void;
+  onSubmit: (data: EmailEventApiData) => void;
 }
 
 // Changed to React.Component class
-class DashboardForm extends React.Component<DashboardFormProps, { formData: EmailEventData }> {
+class DashboardForm extends React.Component<DashboardFormProps, { formData: EmailEventApiData }> {
   getPreviousMonday = () => {
     const today = new Date();
     const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, etc.

@@ -15,7 +15,7 @@ export enum EmailEventType {
   LOADED_BY_PROXY = 'loadedByProxy',
 }
 
-export interface EmailEvent {
+export interface EmailEventResponse {
   id?: string;
   email: string;
   date: string;
@@ -26,27 +26,24 @@ export interface EmailEvent {
   ip: string;
   from: string;
   templateId?: number;
+  dateSent?: string;
 }
 
-export interface EmailEventData {
+export interface EmailEventApiData {
   startDate: string;
   endDate: string;
   templateId?: string;
-  limit?: number;
-  offset?: number;
-  sort?: 'desc' | 'asc';
   apiKey?: string;
 }
 
-export interface EmailInfo {
-  limit?: number;
-  offset?: number;
-  messageId?: string;
-  sort?: 'desc' | 'asc';
+export interface EmailInfoApiData {
+  startDate: string;
+  endDate: string;
+  templateId?: string;
   apiKey?: string;
 }
 
-export interface EmailInfoData {
+export interface EmailInfoResponse {
   email?: string;
   subject?: string;
   messageId?: string;
@@ -58,9 +55,9 @@ export interface EmailInfoData {
 }
 
 export interface DashboardFormProps {
-  onDataFetch: (data: EmailEvent[]) => void;
+  onDataFetch: (data: EmailEventResponse[]) => void;
 }
 
 export interface EmailEventsTableProps {
-  data: EmailEvent[];
+  data: EmailEventResponse[];
 }

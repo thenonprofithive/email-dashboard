@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './EmailEventsTable.css';
-import { EmailEvent, EmailEventType } from '../types/api';
+import { EmailEventResponse, EmailEventType } from '../types/api';
 import { StatusColorType, EmailSummary, EventSummary } from '../types/components';
 
 const getEventStatusColor = (event: EmailEventType): StatusColorType => {
@@ -26,7 +26,7 @@ const getEventStatusColor = (event: EmailEventType): StatusColorType => {
 type FilterType = 'All' | 'Bounces' | 'Not Opened';
 
 interface EmailEventsTableProps {
-  events: EmailEvent[];
+  events: EmailEventResponse[];
 }
 
 const EmailEventsTable: React.FC<EmailEventsTableProps> = ({ events }) => {
