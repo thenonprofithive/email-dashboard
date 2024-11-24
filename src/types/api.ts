@@ -28,7 +28,7 @@ export interface EmailEvent {
   templateId?: number;
 }
 
-export interface FormData {
+export interface EmailEventData {
   startDate: string;
   endDate: string;
   templateId?: string;
@@ -36,6 +36,25 @@ export interface FormData {
   offset?: number;
   sort?: 'desc' | 'asc';
   apiKey?: string;
+}
+
+export interface EmailInfo {
+  limit?: number;
+  offset?: number;
+  messageId?: string;
+  sort?: 'desc' | 'asc';
+  apiKey?: string;
+}
+
+export interface EmailInfoData {
+  email?: string;
+  subject?: string;
+  messageId?: string;
+  uuid?: string;
+  date?: string;
+  templateId?: number;
+  from?: string;
+  tags?: string[];
 }
 
 export interface DashboardFormProps {
