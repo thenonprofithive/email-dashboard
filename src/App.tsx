@@ -4,12 +4,12 @@ import EmailEventsTable from './components/EmailEventsTable';
 import { EmailEvent } from './types/api';
 import { fetchEmailEvents } from './services/api';
 import './App.css';
-import { FormData } from './types/api'
+import { EmailEventData } from './types/api'
 
 const App = () => {
   const [emailData, setEmailData] = useState<EmailEvent[] | null>(null);
 
-  const handleSubmit = async (formData: FormData) => {
+  const handleSubmit = async (formData: EmailEventData) => {
     try {
       const data = await fetchEmailEvents(formData);
       setEmailData(data);
